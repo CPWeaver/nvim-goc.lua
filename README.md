@@ -1,7 +1,11 @@
 # nvim-goc.lua
-easy go coverage
-
-![image](https://user-images.githubusercontent.com/1598854/131515315-6178a680-cad1-4ccb-90e4-c61245f10b67.png)
+Simple go coverage plugin that supports:
+* running `go test --coverprofile` from the current file's directory,
+  highlighting covered and not covered lines of the file
+* clearing the coverage highlighting
+* conveniently opening the `_test.go` file based on the current file
+* opening the `_test.go` file in a split window (horizontal (default) or
+  vertical)
 
 ## Install with vim-plug
 
