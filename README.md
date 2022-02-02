@@ -17,22 +17,27 @@ $ nvim +PlugInstall +qall
 
 ## Setup
 
-```lua
+Add to `init.vim`:
+```
+lua <<EOF
+  -- If set, when we switch between buffers, it will not split more than once
+  -- and will switch to the existing buffer instead (ie, this allows
+  -- goc.AlternateSplit to toggle between the windows)
+  --vim.opt.switchbuf = 'useopen'
 
--- if set, when we switch between buffers, it will not split more than once. It will switch to the existing buffer instead
-vim.opt.switchbuf = 'useopen'
+  local goc = require'nvim-goc'
+  -- By default, goc.AlternateSplit will use a horizontal split. Adjust this to
+  -- use a vertical split instead.
+  goc.setup({ verticalSplit = false })
 
-local goc = require'nvim-goc'
-goc.setup({ verticalSplit = false })
+  vim.keymap.set('n', '<leader>gcr', goc.Coverage, {silent=true})
+  vim.keymap.set('n', '<leader>gcc', goc.ClearCoverage, {silent=true})
+  vim.keymap.set('n', ']a', goc.Alternate, {silent=true})
+  vim.keymap.set('n', '[a', goc.AlternateSplit, {silent=true})
 
-
-vim.keymap.set('n', '<Leader>gcr', goc.Coverage, {silent=true})
-vim.keymap.set('n', '<Leader>gcc', goc.ClearCoverage, {silent=true})
-vim.keymap.set('n', ']a', goc.Alternate, {silent=true})
-vim.keymap.set('n', '[a', goc.AlternateSplit, {silent=true})
-
--- default colors
--- vim.highlight.link('GocNormal', 'Comment')
--- vim.highlight.link('GocCovered', 'String')
--- vim.highlight.link('GocUncovered', 'Error')
+  -- default colors
+  -- vim.highlight.link('GocNormal', 'Comment')
+  -- vim.highlight.link('GocCovered', 'String')
+  -- vim.highlight.link('GocUncovered', 'Error')
+EOF
 ```
