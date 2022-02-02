@@ -30,10 +30,17 @@ lua <<EOF
   -- use a vertical split instead.
   goc.setup({ verticalSplit = false })
 
-  vim.keymap.set('n', '<leader>gcr', goc.Coverage, {silent=true})
-  vim.keymap.set('n', '<leader>gcc', goc.ClearCoverage, {silent=true})
-  vim.keymap.set('n', ']a', goc.Alternate, {silent=true})
-  vim.keymap.set('n', '[a', goc.AlternateSplit, {silent=true})
+  -- nvim 0.6.1
+  vim.api.nvim_set_keymap('n', '<leader>gcr', ':lua require("nvim-goc").Coverage()<CR>', {silent=true})
+  vim.api.nvim_set_keymap('n', '<leader>gcc', ':lua require("nvim-goc").ClearCoverage()<CR>', {silent=true})
+  vim.api.nvim_set_keymap('n', ']a', ':lua require("nvim-goc").Alternate()<CR>', {silent=true})
+  vim.api.nvim_set_keymap('n', '[a', ':lua require("nvim-goc").Alternate(true)<CR>', {silent=true})
+
+  -- nvim > 0.6.1
+  --vim.keymap.set('n', '<leader>gcr', goc.Coverage, {silent=true})
+  --vim.keymap.set('n', '<leader>gcc', goc.ClearCoverage, {silent=true})
+  --vim.keymap.set('n', ']a', goc.Alternate, {silent=true})
+  --vim.keymap.set('n', '[a', goc.AlternateSplit, {silent=true})
 
   -- default colors
   -- vim.highlight.link('GocNormal', 'Comment')
