@@ -3,6 +3,18 @@ easy go coverage
 
 ![image](https://user-images.githubusercontent.com/1598854/131515315-6178a680-cad1-4ccb-90e4-c61245f10b67.png)
 
+## Install with vim-plug
+
+Add to `init.vim`:
+```
+Plug 'jdstrand/nvim-goc.lua', { 'branch': 'jdstrand/main' }
+```
+
+Run:
+```
+$ nvim +PlugInstall +qall
+```
+
 ## Setup
 
 ```lua
