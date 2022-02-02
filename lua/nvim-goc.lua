@@ -1,5 +1,3 @@
-local ts_utils = require "nvim-treesitter.ts_utils"
-
 local M = {
   hi = vim.api.nvim_create_namespace("goc"),
   errBuf = nil,
@@ -153,25 +151,6 @@ M.Coverage = function(fn, html)
 
   vim.loop.read_start(stdout, writeToScratch)
   vim.loop.read_start(stderr, writeToScratch)
-end
-
-M.CoverageFunc = function(p, html)
-  if not p then
-    p = ts_utils.get_node_at_cursor()
-    if not p then
-      print("[goc] no test function found")
-      return
-    end
-  end
-  if p:type() ~= "function_declaration" then
-    p = p:parent()
-    if not p then
-      print("[goc] no test function found")
-      return
-    end
-    return M.CoverageFunc(p, html)
-  end
-  return M.Coverage(string.gmatch(ts_utils.get_node_text(p)[1], 'Test[^%s%(]+')(), html)
 end
 
 M.ClearCoverage = function(bufnr)
