@@ -56,9 +56,9 @@ EOF
 Can override the colors by setting the `GocNormal`, `GocCovered` and
 `GocUncovered` highlights. Eg, in `init.vim` to set the colors directly:
 ```
+highlight GocNormal ctermfg=DarkGray guifg=DarkGray
 highlight GocCovered ctermfg=Green cterm=bold guifg=Green gui=bold
 highlight GocUncovered ctermfg=Red cterm=bold guifg=Red gui=bold
-highlight GocNormal ctermfg=DarkGray guifg=DarkGray
 ```
 
 or to use different highlight links:
@@ -71,7 +71,7 @@ highlight link GocUncovered Type
 or via lua (note, `vim.highlight` not available from lua yet so need to use
 `vim.cmd`):
 ```lua
+  vim.cmd[[highlight GocNormal ctermfg=DarkGray guifg=DarkGray]]
   vim.cmd[[highlight GocCovered ctermfg=Green cterm=bold guifg=Green gui=bold]]
   vim.cmd[[highlight GocUncovered ctermfg=Red cterm=bold guifg=Red gui=bold]]
-  vim.cmd[[highlight GocNormal ctermfg=DarkGray guifg=DarkGray]]
 ```
