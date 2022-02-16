@@ -18,7 +18,7 @@ M.setup = function(opts)
   end
 end
 
-M.Coverage = function(fn, html)
+M.Coverage = function(fn)
   print('[goc] ...')
   if M.errBuf ~= nil then
     vim.api.nvim_buf_set_lines(M.errBuf, 0, -1, false, {"..."})
@@ -63,12 +63,6 @@ M.Coverage = function(fn, html)
         if #vim.fn.win_findbuf(M.errBuf) == 0 then
           vim.cmd("vert sb " .. M.errBuf)
         end
-      end
-      if html then
-        local tmphtml = vim.api.nvim_eval('tempname()') .. '.html'
-        vim.cmd(':silent exec "!go tool cover -html='.. tmp ..' -o '.. tmphtml ..'"')
-        html(tmphtml)
-        return
       end
 
       if not vim.api.nvim_buf_is_loaded(bufnr) or #vim.fn.win_findbuf(bufnr) == 0 then

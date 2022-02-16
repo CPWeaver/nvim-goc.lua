@@ -80,3 +80,4 @@ or via lua (note, `vim.highlight` not available from lua yet so need to use
 
 * removed goc.CoverageFunc (tree-sitter dependency)
 * removed Show() command (fzf dependency)
+* removed 'html' arg from Coverage()
