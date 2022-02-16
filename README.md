@@ -75,3 +75,8 @@ or via lua (note, `vim.highlight` not available from lua yet so need to use
   vim.cmd[[highlight GocCovered ctermfg=Green cterm=bold guifg=Green gui=bold]]
   vim.cmd[[highlight GocUncovered ctermfg=Red cterm=bold guifg=Red gui=bold]]
 ```
+
+## Differences with upstream
+
+* removed goc.CoverageFunc (tree-sitter dependency)
+* removed Show() command (fzf dependency)
