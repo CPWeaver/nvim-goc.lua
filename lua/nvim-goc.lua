@@ -18,7 +18,7 @@ M.setup = function(opts)
   end
 end
 
-M.Coverage = function(fn)
+M.Coverage = function()
   print('[goc] ...')
   if M.errBuf ~= nil then
     vim.api.nvim_buf_set_lines(M.errBuf, 0, -1, false, {"..."})
@@ -33,9 +33,6 @@ M.Coverage = function(fn)
   local h = nil
 
   local args = {'test', '-coverprofile', tmp, package}
-  if fn then
-    args = {'test', '-coverprofile', tmp, "-run", fn, package}
-  end
 
   if M.errBuf == nil then
     M.errBuf = vim.api.nvim_create_buf(true, true)
