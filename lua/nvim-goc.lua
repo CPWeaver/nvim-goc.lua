@@ -25,13 +25,18 @@ M.Coverage = function()
   else
     M.errBuf = vim.api.nvim_create_buf(true, true)
   end
+
+  -- calculate the full path of our file (stripping out _test in case we're
+  -- looking at the _test.go file)
   local fullPathFile = string.gsub(vim.api.nvim_buf_get_name(0), "_test", "")
   local bufnr = vim.uri_to_bufnr("file://" .. fullPathFile)
 
-  -- use '%:.' to ensure the current path is relative (required for matching
-  -- coverage output)
+  -- likewise for relativeFile, but use vim.fn.expand('%:.') to ensure the
+  -- current path is relative (required for matching coverage output)
   local relativeFile = string.gsub(vim.fn.expand('%:.'), "_test", "")
+  -- dirname of the file we're editing to give to 'go test'
   local package = vim.fn.expand('%:p:h')
+  -- relative to securely created nvim temporary directory
   local tmp = vim.api.nvim_eval('tempname()')
 
   local stdout = vim.loop.new_pipe(false)
@@ -65,8 +70,11 @@ M.Coverage = function()
       end
 
       if not vim.api.nvim_buf_is_loaded(bufnr) or #vim.fn.win_findbuf(bufnr) == 0 then
+	-- if the file isn't already open (eg, we were looking at the _test.go
+	-- file), then open the file in a split
         vim.cmd(M.splitCmd .. string.gsub(fullPathFile, vim.fn.getcwd() .. '/', ''))
       elseif vim.tbl_contains(vim.opt.switchbuf:get(), 'useopen') then
+	-- if it is open and we have 'useopen' set, then switch to that buffer
         vim.cmd(":sb " .. string.gsub(fullPathFile, vim.fn.getcwd() .. '/', ''))
       end
 
