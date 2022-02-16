@@ -77,11 +77,18 @@ M.Coverage = function()
       local lines = vim.api.nvim_eval('readfile("' .. tmp .. '")')
       -- TODO: cleanup the tmp file in some way after reading it (they are
       -- deleted after nvim closes)
+      --vim.api.delete(tmp)
 
-      -- Note: lua starts with '1' not '0'
+      -- Skip the first line since it doesn't have anything interesting (lua
+      -- starts with '1' not '0').
       for i = 2,#lines do
+	-- For every line in the coverage output, look for the current relative
+	-- file. Importantly, this requires relativeFile to be of the form
+	-- 'path/to/foo.goo' (and not /abs/path/to/foo.go or ./path/to/foo.go).
+	-- This must use 'vim.fn.expand("%:.")' when calculating relativeFile
+	-- for this to work.
         local path = string.gmatch(lines[i], '(.+):')()
-        if string.find(path, relativeFile) then
+        if path:sub(-#relativeFile) == relativeFile then
           local marks = string.gmatch(string.gsub(lines[i], '[^:]+:', ''), '%d+')
 
           local startline = math.max(tonumber(marks()) - 1, 0)
