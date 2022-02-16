@@ -105,6 +105,7 @@ M.Coverage = function()
         end
       end
     else
+      -- in case of error, show a message and then show the errBuf in a split
       print("[goc] fail!")
       if #vim.fn.win_findbuf(M.errBuf) == 0 then
         vim.cmd(M.splitSBCmd .. " sb " .. M.errBuf)
