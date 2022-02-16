@@ -22,6 +22,8 @@ M.Coverage = function()
   print('[goc] ...')
   if M.errBuf ~= nil then
     vim.api.nvim_buf_set_lines(M.errBuf, 0, -1, false, {"..."})
+  else
+    M.errBuf = vim.api.nvim_create_buf(true, true)
   end
   local fullPathFile = string.gsub(vim.api.nvim_buf_get_name(0), "_test", "")
   local bufnr = vim.uri_to_bufnr("file://" .. fullPathFile)
@@ -32,23 +34,21 @@ M.Coverage = function()
   local package = vim.fn.expand('%:p:h')
   local tmp = vim.api.nvim_eval('tempname()')
 
-  local h = nil
-
-  local args = {'test', '-coverprofile', tmp, package}
-
-  if M.errBuf == nil then
-    M.errBuf = vim.api.nvim_create_buf(true, true)
-  end
-
   local stdout = vim.loop.new_pipe(false)
   local stderr = vim.loop.new_pipe(false)
-  h = vim.loop.spawn('go', {args = args, stdio = {nil, stdout, stderr}}, vim.schedule_wrap(function(code, signal)
-    M.ClearCoverage(bufnr)
+  local handle = nil
+  handle = vim.loop.spawn('go', {args = {'test', '-coverprofile', tmp, package}, stdio = {nil, stdout, stderr}}, vim.schedule_wrap(function(code, signal)
 
     stdout:read_stop()
     stderr:read_stop()
-    h:close()
+    stdout:close()
+    stderr:close()
+    handle:close()
 
+    -- shouldn't be needed but let's make sure we have a clean slate
+    M.ClearCoverage(bufnr)
+
+    -- 'go test' completed successfully
     if code == 0 then
       local percent = string.gmatch(table.concat(vim.api.nvim_buf_get_lines(M.errBuf, 0, -1, true)), 'coverage: (%d+)')()
       if percent ~= nil then
@@ -75,6 +75,10 @@ M.Coverage = function()
       end
 
       local lines = vim.api.nvim_eval('readfile("' .. tmp .. '")')
+      -- TODO: cleanup the tmp file in some way after reading it (they are
+      -- deleted after nvim closes)
+
+      -- Note: lua starts with '1' not '0'
       for i = 2,#lines do
         local path = string.gmatch(lines[i], '(.+):')()
         if string.find(path, relativeFile) then
