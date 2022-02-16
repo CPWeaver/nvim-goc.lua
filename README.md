@@ -76,6 +76,20 @@ or via lua (note, `vim.highlight` not available from lua yet so need to use
   vim.cmd[[highlight GocUncovered ctermfg=Red cterm=bold guifg=Red gui=bold]]
 ```
 
+## Usage
+
+Assuming 'leader' is set to '\' and you're using the above mappings:
+
+`\gcr`          Run `go test --coverprofile` in current directory. Will open
+		the non-test file in a split if viewing the `_test.go` file.
+		Will show errors in a split window if there are any, otherwise
+		highlights covered code with GocCovered, uncovered with
+		GocUncovered and everything else GocNormal
+`\gcc`          Clears highlights (restores to current colorscheme)
+`]a`            Switch to alternate file (eg, `_test.go` if viewing the
+                non-test file and vice-versa)
+`[a`            Switch to alternate file in a split
+
 ## Differences with upstream
 
 * removed goc.CoverageFunc (tree-sitter dependency)
